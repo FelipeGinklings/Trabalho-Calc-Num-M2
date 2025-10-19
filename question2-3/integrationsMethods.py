@@ -66,7 +66,7 @@ def result_I_trapezoid_with_y_list(y_list: list, h: int) -> float:
     # include endpoints
     scaled_y_values.append(y_list[0])
     scaled_y_values.append(y_list[-1])
-    return I_trapezoid(h, sum(y_list))
+    return I_trapezoid(h, sum(scaled_y_values))
 
 
 if __name__ == "__main__":
