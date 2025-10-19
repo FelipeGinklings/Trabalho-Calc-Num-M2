@@ -1,8 +1,6 @@
 # %%
 import math
-from typing import Tuple
 from functools import reduce
-from functools import singledispatch
 
 
 # %%
@@ -64,19 +62,14 @@ def result_I_trapezoid_with_expression(
 
 # Regra dos Trapézios resultado
 def result_I_trapezoid_with_y_list(y_list: list, h: int) -> float:
-    y = [value * 2 for value in y]
+    scaled_y_values = [value * 2 for value in y_list]
     # include endpoints
-    y.append(y[0])
-    y.append(y[-1])
+    scaled_y_values.append(y_list[0])
+    scaled_y_values.append(y_list[-1])
     return I_trapezoid(h, sum(y_list))
 
 
 if __name__ == "__main__":
-    # print(
-    #     result_I_trapezoid_with_expression(
-    #         lambda x: (x**3) * math.log(x, math.e), (1, 3, (3 - 1) / 4)
-    #     )
-    # )
     print(round(result_I_trapezoid_with_expression(func, (0, 1, 1 / 50)), 6))
 
 
@@ -130,44 +123,4 @@ def result_I_Simpson_with_y_list(
 
 
 if __name__ == "__main__":
-    # print(4 * result_I_Simpson_with_expression(lambda x: (1 + (x**2)) ** -1, (0, 1, 0.25)))
-    # print(
-    #     result_I_Simpson_with_expression(
-    #         lambda x: x * (math.e ** (2 * x)) / ((1 + 2 * x) ** 2), (0, 3, 0.5)
-    #     )
-    # )
     print(round(result_I_Simpson_with_expression(func, (0, 1, 1 / 100)), 6))
-
-
-# %%
-@singledispatch
-def sum_two_values(a, b):
-    raise TypeError("Unsupported types")
-
-
-@sum_two_values.register
-def _(a: int, b: int):
-    return a + b
-
-
-@sum_two_values.register
-def _(a: list, b: list):
-    return sum(a) + sum(b)
-
-
-@sum_two_values.register
-def _(a: bool, b: bool):
-    return a and b
-
-
-@sum_two_values.register
-def _(a: object, b: object):
-    if not callable(a) or not callable(b):
-        raise TypeError("Expression must be callable")
-    return a() + b()
-
-
-if __name__ == "__main__":
-    print(sum_two_values(2, 3))  # 5
-    print(sum_two_values([2, 3, 4], [1, 2, 3]))  # 15
-    print(sum_two_values(False, True))  # False
