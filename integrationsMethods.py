@@ -23,6 +23,11 @@ def I_Simpson(h: float, y: float):
 
 
 # %%
+def func(x):
+    return (math.exp(-(x**2))) / (math.cos(x) + 2)
+
+
+# %%
 def _ensure_int(value, name: str) -> int:
     if isinstance(value, int):
         return value
@@ -48,7 +53,9 @@ def result_I_trapezoid_with_expression(
     end = _ensure_int(end, "end")
     step = _ensure_int(step, "step")
     # sample interior points (normalized by weight)
-    y = [expression(x / weight) * 2 for x in range(start + step, end, step)]
+
+    y = [expression(x / weight) for x in range(start + step, end, step)]
+    y = list(map(lambda x: x * 2, y))
     # include endpoints
     y.insert(0, expression(start / weight))
     y.append(expression(end / weight))
@@ -57,19 +64,20 @@ def result_I_trapezoid_with_expression(
 
 # Regra dos Trapézios resultado
 def result_I_trapezoid_with_y_list(y_list: list, h: int) -> float:
-    doubled_y_values = [value * 2 for value in y_list]
+    y = [value * 2 for value in y]
     # include endpoints
-    doubled_y_values.append(y_list[0])
-    doubled_y_values.append(y_list[-1])
-    return I_trapezoid(h, sum(doubled_y_values))
+    y.append(y[0])
+    y.append(y[-1])
+    return I_trapezoid(h, sum(y_list))
 
 
 if __name__ == "__main__":
-    print(
-        result_I_trapezoid_with_expression(
-            lambda x: (x**3) * math.log(x, math.e), (1, 3, (3 - 1) / 4)
-        )
-    )
+    # print(
+    #     result_I_trapezoid_with_expression(
+    #         lambda x: (x**3) * math.log(x, math.e), (1, 3, (3 - 1) / 4)
+    #     )
+    # )
+    print(round(result_I_trapezoid_with_expression(func, (0, 1, 1 / 50)), 6))
 
 
 # %%
@@ -122,14 +130,13 @@ def result_I_Simpson_with_y_list(
 
 
 if __name__ == "__main__":
-    print(
-        4 * result_I_Simpson_with_expression(lambda x: (1 + (x**2)) ** -1, (0, 1, 0.25))
-    )
-    print(
-        result_I_Simpson_with_expression(
-            lambda x: x * (math.e ** (2 * x)) / ((1 + 2 * x) ** 2), (0, 3, 0.5)
-        )
-    )
+    # print(4 * result_I_Simpson_with_expression(lambda x: (1 + (x**2)) ** -1, (0, 1, 0.25)))
+    # print(
+    #     result_I_Simpson_with_expression(
+    #         lambda x: x * (math.e ** (2 * x)) / ((1 + 2 * x) ** 2), (0, 3, 0.5)
+    #     )
+    # )
+    print(round(result_I_Simpson_with_expression(func, (0, 1, 1 / 100)), 6))
 
 
 # %%
@@ -164,6 +171,3 @@ if __name__ == "__main__":
     print(sum_two_values(2, 3))  # 5
     print(sum_two_values([2, 3, 4], [1, 2, 3]))  # 15
     print(sum_two_values(False, True))  # False
-    print(type(teste))
-
-# %%
